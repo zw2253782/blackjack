@@ -2,6 +2,7 @@ package main;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import poker.PokerCard;
 import ultility.Log;
@@ -38,9 +39,20 @@ public class Main {
 	}
 	
 	private static void shuffle(List<PokerCard> deck) {
+		
+		Random rand = new Random();
+
 		for(int i = 0; i < deck.size(); ++i) {
+			int rint = rand.nextInt(13);
+			Log.d(TAG, rint);
+			
 			PokerCard card = deck.get(i);
 			card.setValue(i - 1);
+			
+			PokerCard first = deck.get(0);
+			PokerCard fifth = deck.get(4);
+			deck.set(0, fifth);
+			deck.set(4, first);
 		}
 	}
 
