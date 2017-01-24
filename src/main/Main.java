@@ -133,7 +133,8 @@ public class Main {
         */
 	}
 
-	public static void OneRound(/*parameters*/) {
+	public static void OneRound(Deck deck, Player dealer, Player[] players) {
+		int num = players.length;
 		if(deck.shouldBeShuffled()) {
 			//shuffle the card
 			deck.shuffle();
@@ -142,7 +143,7 @@ public class Main {
 			
 			//phase 1: 2 cards for each player
 			for(int i = 0; i < 2; ++i) {
-				for(int j = 0; j < numberOfPlayers; ++j) {
+				for(int j = 0; j < num; ++j) {
 					players[j].getOneHand(0).hit(deck.drawCard());
 				}
 				dealer.getOneHand(0).hit( deck.drawCard());
@@ -150,7 +151,7 @@ public class Main {
 			//phase 2: check blackjack
 			
 			//phase 3: strategy starts
-			for(int j = 0; j < numberOfPlayers; ++j) {
+			for(int j = 0; j < num; ++j) {
 				Player player = players[j];
 				int k = player.numberOfHands();
 				for(int m = 0; m < k; ++m) {
