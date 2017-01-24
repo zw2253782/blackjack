@@ -3,26 +3,44 @@ package poker;
 public class PokerCard {
 	
 	private int index_ = 0;
+	//remove
 	private int value_ = 0;
-	private String color_ = "";
 	
-	public static String SPADE = "spade";
-	public static String HEART = "heart";
-	public static String DIAMOND = "diamond";
-	public static String CLUB = "club";
+	private int color_ = 0;
+	private static String[] colors_ = { "Clubs", "Diamonds", "Hearts", "Spades" };
 	
-	public PokerCard() {
-		
+	////
+	private static String[] values_ = {"Joker","Ace","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Jack","Queen","King"};
+    
+	public PokerCard(int color_, int values_) 
+	{
+	    this.index_=values_;
+		this.color_=color_;
 	}
 	
-	public PokerCard(int i, String color) {
-		this.index_ = i;
-		this.color_ = color;
+	public String toString()
+	{
+	    return values_[index_]+" of "+colors_[color_];
+	}
+	
+	public void setValue(int i) 
+	{
 		this.value_ = i;
 	}
 	
-	public void setValue(int i) {
-		this.value_ = i;
+	public int getRank()
+	{
+		return value_;
 	}
-
+	public int getColor(int i)
+	{
+		return color_;	
+	}
+	public int getValue() {
+		return this.value_;
+	}
+	
+	public boolean equalValue(PokerCard card) {
+		return card.getValue() == this.value_;
+	}
 }
