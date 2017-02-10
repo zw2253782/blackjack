@@ -1,43 +1,49 @@
 package poker;
 
+import ultility.Log;
+
 public class PokerCard {
 	
-	private int index_ = 0;
-	//remove
+	private static final String TAG = "PokerCard";
 	private int value_ = 0;
+	private String color_ = "";
 	
-	private int color_ = 0;
-	private static String[] colors_ = { "Clubs", "Diamonds", "Hearts", "Spades" };
+	public static final String CLUB = "clubs";
+	public static final String DIAMOND = "diamonds";
+	public static final String HEART = "hearts";
+	public static final String SPADE = "spades";
 	
-	////
-	private static String[] values_ = {"Joker","Ace","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Jack","Queen","King"};
-    
-	public PokerCard(int color_, int values_) 
+	
+	public PokerCard(int val, String color) 
 	{
-	    this.index_=values_;
-		this.color_=color_;
+		if(val < 1 || val > 13) {
+			Log.error(TAG, "Poker card value error:" + val);
+		}
+		this.value_ = val;
+		this.color_ = color; 
 	}
 	
-	public String toString()
-	{
-	    return values_[index_]+" of "+colors_[color_];
-	}
-	
-	public void setValue(int i) 
-	{
-		this.value_ = i;
-	}
-	
-	public int getRank()
-	{
-		return value_;
-	}
-	public int getColor(int i)
+	public String getColor()
 	{
 		return color_;	
 	}
-	public int getValue() {
-		return this.value_;
+	
+	
+	public int getValue() 
+	{
+		return value_;
+	}
+	
+	public int getTTValue() 
+	{
+		if(this.value_>9)
+		{
+			return 10;
+		}
+		else
+		{
+		return value_;
+		}
 	}
 	
 	public boolean equalValue(PokerCard card) {

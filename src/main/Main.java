@@ -3,7 +3,6 @@ package main;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
 import poker.Deck;
 import poker.OneHand;
 import poker.Player;
@@ -17,152 +16,120 @@ import com.google.gson.Gson;
 public class Main {
 	private static int AceCounter;//how many aces are in the user's hand
 	private static int handvalue;//the value of the user's hand
-	
+	private static int bet;//how much the user wants to bet
 	private static final String TAG = "Main";
+	
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) 
 	{
 		// TODO Auto-generated method stub
-		Deck deck = new Deck(1);
-		deck.shuffle();
+		Gson gson = new Gson();
+		//Deck deck = new Deck(4);
+		//deck.shuffle();
 		
-		//init
-		int numberOfPlayers = 1;
-		Player dealer = new Player();
-		Player [] players = new Player[numberOfPlayers];
-		
-		for(int i = 0; i < numberOfPlayers; ++i) {
-			players[i] = new Player();	
+		OneHand hand = new OneHand(100);		
+		PokerCard card = new PokerCard(3, PokerCard.SPADE);
+		PokerCard newcard = new PokerCard(10, PokerCard.CLUB);
+	
+		hand.hit(card);
+		hand.hit(newcard);
+		Strategy x = new Strategy();
+
+		for(int i = 0; i < 10; ++i) {
+			String res = x.hardHandStrategy(hand, i + 1);
+			Log.d(TAG, res);
 		}
 		
 		
-		//one round
+				
 		
+	}	
+	
+	public static void testRound() {
+		Deck deck = new Deck(4);
+		deck.shuffle();
+		//init player  draw two cards
+		//dealer draw two cards
+		//check 
 		
-		/*
-		Gson gson = new Gson();
-		Log.d(TAG, gson.toJson(deck));		
-		*/
-		
-		
-		/*
-		AceCounter=0;
-		player dealer = new player(deck);
-        List<PokerCard> hand = new ArrayList<PokerCard>();
-        hand.add(deck.drawCard());
-        hand.add(deck.drawCard());
-        System.out.println("Here is your hand: ");
-        System.out.println("===========================");  
-        System.out.println(hand.get(0).getRank());
-        System.out.println(hand);
-        int handvalue = calcHandValue(hand);
-        System.out.println("The dealer is showing: ");
-        System.out.println("===========================");  
-        dealer.showFirstCard();
-        if(hasBlackJack(handvalue) && dealer.hasBlackJack())//check if both the user and dealer have blackjack.
-        {
-            Push();
-        }
-        else if(hasBlackJack(handvalue))//check if the user has blackjack.
-        {
-            System.out.println("You have BlackJack!");
-            System.out.println("You win 2x your money back!");
-            Win();
-        }
-        else if(dealer.hasBlackJack())//check if the dealer has blackjack.
-        {
-            System.out.println("Here is the dealer's hand:");
-            dealer.showHand();
-            Lose();
-        }
-        else
-        {   
-            System.out.println("Would you like to hit or stand?");//ask if the user will hit or stand
-            Scanner hitorstand = new Scanner(System.in);
-            String hitter = hitorstand.nextLine();
-            while(!isHitorStand(hitter))
-            {
-                System.out.println("Please enter 'hit' or 'stand'.");
-                hitter = hitorstand.nextLine();
-            }
-            while(hitter.equals("hit"))//hits the user as many times as he or she pleases.
-            {
-                Hit(deck, hand);
-                System.out.println("Your hand is now:");
-                System.out.println(hand);
-                handvalue = calcHandValue(hand);
-                if(checkBust(handvalue))//checks if the user busted
-                {
-                    Lose();
-                    break;
-                }
-                System.out.println("Would you like to hit or stand?");
-                hitter = hitorstand.nextLine();
-            }
-            if(hitter.equals("stand"))//lets the user stand.
-            {
-                int dealerhand = dealer.takeTurn(deck);//takes the turn for the dealer.
-                System.out.println("");
-                System.out.println("Here is the dealer's hand:");
-                dealer.showHand();
-                if(dealerhand>21)//if the dealer busted, user wins.
-                {
-                    Win();
-                }
-                else
-                {
-                    int you = 21-handvalue;//check who is closer to 21 and determine winner
-                    int deal = 21-dealerhand;
-                    if(you==deal)
-                    {
-                        Push();
-                    }
-                    if(you<deal)
-                    {
-                        Win();
-                    }
-                    if(deal<you)
-                    {
-                        Lose();
-                    }
-                }
-            }
-        }
-        */
+		//
 	}
+	
+		
 
-	public static void OneRound(Deck deck, Player dealer, Player[] players) {
+	//basic player strategy: winning rate
+	
+
+		
+		//initial players
+
+	
+	//one round
+ /*   public static void OneRound(Deck deck, Player[] players, Player dealer) 
+	{
 		int num = players.length;
-		if(deck.shouldBeShuffled()) {
+		
+        List<PokerCard> hand1 = new ArrayList<PokerCard>();
+        hand1.add(deck.drawCard());
+	    
+		if(deck.shouldBeShuffled()) 
+		{
 			//shuffle the card
 			deck.shuffle();
+			Gson gson = new Gson();
+			Log.d(TAG, gson.toJson(deck));
 		}
-		for(;;) {
+		for(;deck.drawCard()!=null;) {
 			
 			//phase 1: 2 cards for each player
 			for(int i = 0; i < 2; ++i) {
 				for(int j = 0; j < num; ++j) {
 					players[j].getOneHand(0).hit(deck.drawCard());
 				}
-				dealer.getOneHand(0).hit( deck.drawCard());
+				dealer.getOneHand(0).hit(deck.drawCard());
 			}
 			//phase 2: check blackjack
-			
+		for(int j = 0; j < num; ++j) 
+		{
+			if(players[j].getOneHand(0).isBlackJack() && dealer.getOneHand(0).isBlackJack())//check if both the user and dealer have blackjack.
+	        {
+	            Push();
+	        }
+	        else if(players[j].getOneHand(0).isBlackJack())//check if the user has blackjack.
+	        {
+	            System.out.println("You have BlackJack!");
+	            System.out.println("You win 2x your money back!");
+	            Win();
+	        }
+	        else if(dealer.getOneHand(0).isBlackJack())//check if the dealer has blackjack.
+	        {
+	            System.out.println("Here is the dealer's hand:");
+	            System.out.println(dealer.getOneHand(0));
+	            Lose();
+	        }
+	    }
 			//phase 3: strategy starts
 			for(int j = 0; j < num; ++j) {
 				Player player = players[j];
 				int k = player.numberOfHands();
 				for(int m = 0; m < k; ++m) {
 					OneHand curhand = player.getOneHand(m);
-					String stra = Strategy.PlayerStrategy(curhand, dealer.getOneHand(0).firstCard());
+					Strategy x = new Strategy();
+					String stra = x.PlayerStrategy(curhand, dealer.getOneHand(0).firstCard().getValue());;
 					//hit
-					if(stra.equals("STAND")) {
+					if(stra.equals("STAND")) 
+					{
 						continue;
-					} else if (stra.equals("fdafda")) {
-						
-					} else if (stra.equals("SPLIT")) {
+					} 
+					else if (stra.equals("DOUBLEDOWN")) 
+					{
+					    double betDOUBLEDOWN = 2*bet;
+						continue;
+					} 
+					else if (stra.equals("SPLIT"))
+					{
 					//if split down
 						OneHand another = curhand.split();
 						curhand.hit(deck.drawCard());
@@ -170,33 +137,60 @@ public class Main {
 						//restart the process
 						m = 0;
 						continue;
-					} else {
-						
+					}
+					else if (stra.equals("HIT")) 
+					{
+						Hit(deck, hand1);
+		                System.out.println("Your hand is now:");
+		                System.out.println(hand1);
+		                handvalue = calcHandValue(hand1);
+		                if(checkBust(handvalue))//checks if the user busted
+		                {
+		                    Lose();
+		                    break;
+		                }
 					}
 				}
 			}
-			//
-			while(true) {
-				OneHand hand = dealer.getOneHand(0);
-				String stra = Strategy.DealerStrategy(hand);
-				if(stra.equals("HIT")) {
-					
-				} else if(stra.equals("STAND")) {
-					break;
-				} else {
-					
-				}
+		}
 			}
+/*			//dealer strategy
+				OneHand hand = dealer.getOneHand(0);
+				String stra = Strategy.DealerStrategy(dealer);
+				if(stra.equals("HIT"))
+				{
+					Hit(deck, hand1);
+				} 
+				else if(stra.equals("STAND")) 
+				{
+				break;
+				} 
+
 			
 			//phase 4, compare  
-			
+			OneHand you = new OneHand(1);//check who is closer to 21 and determine winner
+			OneHand dealerCard = new OneHand(1);
+            
+            if(you.playerCardValue()==dealerCard.playerCardValue())
+            {
+                Push();
+            }
+            if(you.playerCardValue()<dealerCard.playerCardValue())
+            {
+                Win();
+            }
+            if(you.playerCardValue()>dealerCard.playerCardValue())
+            {
+                Lose();
+            }
 		}
 	}
-
+*/
 
 /*
  * Checks if the user has blackjack.
  */
+/*
 public static boolean hasBlackJack(int handValue)
 {
     if(handValue==21)
@@ -228,6 +222,7 @@ public static int calcHandValue(List<PokerCard> hand)
     }
     return handvalue;
 }
+
 /*
  * Asks the user how much he or she would like to bet.
  */

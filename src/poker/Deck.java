@@ -1,65 +1,95 @@
 package poker;
 
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
-import ultility.Log;
 
 public class Deck {
 
-	//change to LinkedList
-	//  [1, 2, 3]
-	// remove(0) [2, 3]
-	//linkedList [2] [3]
-	private ArrayList<PokerCard> deck;//represents a deck of cards
-	private int shuffle_point_ = 0;
+	private List<PokerCard> deck_ = new LinkedList<PokerCard>();//represents a deck of cards
+	private int shuffle_point_ = 0; 
+	private static final String TAG = "Deck";
+	
+	private int hot_ = -10;
+	// 2,3,4,5,6  => -1
+	// 10,j,q,k,1  => 1
+	
+	public void init(int num) {
+		for (int i = 0; i < num; ++i)
+		{
+			for (int j = 1; j < 14; ++j)
+			{
+				deck_.add(new PokerCard(j, PokerCard.CLUB));
+				deck_.add(new PokerCard(j, PokerCard.DIAMOND));
+				deck_.add(new PokerCard(j, PokerCard.HEART));
+				deck_.add(new PokerCard(j, PokerCard.SPADE));	
+			}
+		}
+		shuffle_point_ = this.deck_.size()/3;
+	}
 	
 	//change to number of decks
 	public Deck(int num)    
 	{
-		deck = new ArrayList<PokerCard>();
-		for(int i=0; i<4; i++) 
-		{
-	        for(int j=1; j<=13; j++) 
-	           {
-	               deck.add(new PokerCard(i,j));
-	               //Log.d(i, j);
-	           }
-	       }
-	    shuffle_point_ = 20;
-	   }
+		init(num);
+	}
+	
+	public Deck(int num, int hot) {
+		init(num);
+		this.shuffle();
+		//hot
+		//for();
+		//shuffle
+		this.shuffle();
+	}
+	
 
-	//change to one time shuffle
-	   public void shuffle() {
+
+	public void test(int num) {
 		
-		   Random rand = new Random();
-		 for(int i=0; i<500; i++) 
-	       {
-			 int index1 = rand.nextInt(deck.size()-1);
-		     int index2 = rand.nextInt(deck.size()-1);
-		     PokerCard temp = deck.get(index2);
-		     deck.set(index2, deck.get(index1));
-		     deck.set(index1, temp);
-		     
-	       }
-
-	  }	
-
-		
-	/*
-	 * Draws a card from the deck.
-	 */
-	public PokerCard drawCard()
+	}
+	
+	public int numberOfCardLeft() 
 	{
-		//judge how many cards left, 
-	    return deck.remove(0);
+		return this.deck_.size();
 	}
 	
 	//check if the deck is need to be shuffled
+	public boolean shouldBeShuffled() 
+	{
+		if (deck_.size() <= shuffle_point_)
+		{
+			return true;
+		}
+		else
+		{
+		    return false;
+		}
+	 }
+
+		
+	//change to one time shuffle
+	public void shuffle() 
+	{
+		Random rand = new Random();
+		for(int i=0; i< deck_.size(); i++)
+		{
+		     int Num = rand.nextInt(deck_.size());
+		     Collections.swap(deck_, i, Num);
+	    }
+	 }
 	
-	public boolean shouldBeShuffled() {
-		return false;
-	}
+	/*
+	 * Draws a card from the deck.
+	 */
+	 public PokerCard drawCard()
+	 {	
+		 return deck_.remove(0);
+	 }
+	
+	
 }
    
   

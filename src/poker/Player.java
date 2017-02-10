@@ -1,5 +1,6 @@
 package poker;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Player {
@@ -24,5 +25,10 @@ public class Player {
 	
 	public int numberOfHands() {
 		return this.hands_.size();
+	}
+	
+	
+	public Player() {
+		this.hands_ = new ArrayList<OneHand>();
 	}
 }
